@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { ValidationError } from "class-validator";
 import { ErrorStatusCode, SuccessStatusCode } from "./status-codes";
 
 @Injectable()
