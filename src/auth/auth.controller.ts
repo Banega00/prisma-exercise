@@ -10,7 +10,7 @@ export class AuthController{
 
     }
 
-    @Put('login')
+    @Post('login')
     async login(@Body() body: DTO.Request.LoginRequestDTO){
         
         await this.authService.login(body.email, body.password)
