@@ -1,6 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import * as DTO from '../auth/dtos/index'
+import CustomError from "src/helper/custom-error";
+import { ErrorStatusCode, SuccessStatusCode } from "src/helper/status-codes";
+import { hashPassword, verifyPassword } from "src/helper/hash.function";
 @Injectable()
 export class AuthService{
     
@@ -16,13 +19,10 @@ export class AuthService{
         })
 
         if(!user){
-            throw new Error("User not found")
+            throw new CustomError({code: ErrorStatusCode.USER_NOT_FOUND, status: 404})
         }
 
-        //TODO hashing passwords
-        if(user.password !== password){
-            throw new Error("Incorrect password")
-        }
+        const isMatch = verifyPassword(password, user.password);
 
         return user
     }
@@ -35,13 +35,15 @@ export class AuthService{
         })
 
         if(existingUser){
-            throw new Error("User already exists")
+            throw new CustomError({code: ErrorStatusCode.USER_ALREADY_EXISTS, status: 400})
         }
+
+        const hashedPassword = hashPassword(userData.password)
 
         const user = await this.prisma.user.create({data: {
             email: userData.email,
             name: userData.name,
-            password: userData.password
+            password: hashedPassword
         }})
 
         return user;

@@ -3,6 +3,7 @@ require('dotenv').config()
 class ConfigService {
 
     public env = {
+        environment: this.getValue('NODE_ENV') || this.getValue('ENV') || this.getValue('ENVIRONMENT'),
         port: +this.getValue('PORT') || 8080,
         db: {
             port: +this.getValue('DB_PORT') || 5432,
