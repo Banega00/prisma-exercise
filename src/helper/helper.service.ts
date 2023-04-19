@@ -25,9 +25,9 @@ export class HelperService {
         return token;
     }
 
-    verifyJWT(token: string) {
+    verifyJWT = (token: string):{ id: number, email: string, role?: string } | false => {
         try{
-            return verify(token, configService.env.jwt_secret);
+            return verify(token, configService.env.jwt_secret) as any;
         }catch(error){
             return false;
         }

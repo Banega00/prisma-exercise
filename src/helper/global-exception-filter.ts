@@ -1,4 +1,4 @@
-import { ArgumentsHost, Catch, ExceptionFilter } from "@nestjs/common";
+import { ArgumentsHost, BadRequestException, Catch, ExceptionFilter } from "@nestjs/common";
 import Blogger from "./blogger";
 import { Request, Response } from 'express';
 import CustomError from "./custom-error";
@@ -13,6 +13,22 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
         const request = ctx.getRequest<Request>();
+
+        //logic for validation exceptions
+        if(exception instanceof BadRequestException){
+            const message = exception.message || getStatusCodeDescription(ErrorStatusCode.VALIDATION_ERROR);
+            this.logger.error(message, exception);
+
+            //give validation details only in development environment
+            const errorPayload = configService.env.environment?.startsWith("dev") ? (exception as any).response.message : undefined;
+
+            return response.status(400).json({
+                statusCode: ErrorStatusCode.VALIDATION_ERROR,
+                message: message,
+                payload: errorPayload,
+                status: 400
+            })
+        }
 
         if (exception instanceof CustomError) {
             const message = exception.message || getStatusCodeDescription(exception.code);

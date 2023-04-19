@@ -1,10 +1,11 @@
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from "@nestjs/common";
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler, UseInterceptors } from "@nestjs/common";
 import { Observable, map } from "rxjs";
 import { CustomResponse } from "./custom-response";
 import { getStatusCodeDescription, SuccessStatusCode } from "./status-codes";
 
+export const StatusCode = (code: number) => UseInterceptors(new StatusCodeInterceptor(code));
 @Injectable()
-export class StatusCodeInterceptor<T> implements NestInterceptor<T, CustomResponse<T>>{
+class StatusCodeInterceptor<T> implements NestInterceptor<T, CustomResponse<T>>{
   constructor(private readonly successStatusCode: SuccessStatusCode) {}
 
   intercept(

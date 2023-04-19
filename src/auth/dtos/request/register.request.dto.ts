@@ -1,4 +1,6 @@
-import { IsNotEmpty, IsString, Length } from "class-validator"
+import { Role } from "@prisma/client";
+import { Transform } from "class-transformer";
+import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString, Length } from "class-validator"
 import { RequestDTO } from "./index"
 
 export class RegisterRequestDTO extends RequestDTO{
@@ -20,4 +22,8 @@ export class RegisterRequestDTO extends RequestDTO{
     @IsNotEmpty()
     @IsString()
     name: string
+
+    @Transform(param => param.value?.toUpperCase() || Role.USER)
+    @IsEnum(Role)
+    role: Role = Role.USER;
 }

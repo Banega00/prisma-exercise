@@ -26,7 +26,7 @@ export class AuthService{
             throw new CustomError({code: ErrorStatusCode.INVALID_PASSWORD, status: 400})
         };
 
-        return { user: {...user, password: undefined }, token: this.helperService.signJWT({ id: user.id, email: user.email })}
+        return { user: {...user, password: undefined }, token: this.helperService.signJWT({ id: user.id, email: user.email, role: user.role })}
     }
 
     async register(userData: DTO.Request.RegisterRequestDTO) {
@@ -45,9 +45,10 @@ export class AuthService{
         const user = await this.prisma.user.create({data: {
             email: userData.email,
             name: userData.name,
+            role: userData.role,
             password: hashedPassword
         }})
 
-        return { user: {...user, password: undefined }, token: this.helperService.signJWT({ id: user.id, email: user.email })}
+        return { user: {...user, password: undefined }, token: this.helperService.signJWT({ id: user.id, email: user.email, role: user.role })}
     }
 }
