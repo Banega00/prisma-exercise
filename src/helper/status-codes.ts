@@ -2,7 +2,8 @@ export enum ErrorStatusCode {
     UNKNOWN_ERROR = 10000,
     VALIDATION_ERROR = 10001,
     USER_NOT_FOUND = 10002,
-    USER_ALREADY_EXISTS = 10003
+    USER_ALREADY_EXISTS = 10003,
+    INVALID_PASSWORD = 10004
 }
 
 export enum SuccessStatusCode {
@@ -20,6 +21,7 @@ const ErrorStatusCodeDescription: { [key: number]: string } = {
     10001: "Validation error",
     10002: "User not found",
     10003: "User already exists",
+    10004: "Invalid password"
 }
 
 const SuccessStatusCodeDescription: { [key: number]: string } = {

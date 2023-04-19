@@ -11,7 +11,6 @@ export class AuthService{
     }
 
     async login(email: string, password: string) {
-        console.log("email: ", email)
         const user = await this.prisma.user.findUnique({
             where: {
                 email: email
@@ -22,7 +21,9 @@ export class AuthService{
             throw new CustomError({code: ErrorStatusCode.USER_NOT_FOUND, status: 404})
         }
 
-        const isMatch = verifyPassword(password, user.password);
+        if(!verifyPassword(password, user.password)){
+            throw new CustomError({code: ErrorStatusCode.INVALID_PASSWORD, status: 400})
+        };
 
         return user
     }
