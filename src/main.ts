@@ -3,8 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidatorOptions } from 'class-validator';
 import { AppModule } from './app.module';
 import { configService } from './config/config.service';
-import { HelperModule } from './helper/helper.module';
-import { HelperService } from './helper/helper.service';
+import Blogger from './helper/blogger';
 
 export interface ValidationPipeOptions extends ValidatorOptions {
   transform?: boolean;
@@ -15,6 +14,7 @@ export interface ValidationPipeOptions extends ValidatorOptions {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(Blogger.logExpressRoute)
   app.useGlobalPipes(new ValidationPipe({transform: false, disableErrorMessages: false}));
   await app.listen(configService.env.port);
 }
