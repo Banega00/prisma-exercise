@@ -17,4 +17,11 @@ export class AuthController{
 
         return this.helperService.sendResponse({message: "Successful login", data: {}, statusCode: SuccessStatusCode.Success})
     }
+    @Post('register')
+    async register(@Body() body: DTO.Request.RegisterRequestDTO){
+        
+        await this.authService.register(body)
+
+        return this.helperService.sendResponse({message: "Successful login", data: {}, statusCode: SuccessStatusCode.Success})
+    }
 }
