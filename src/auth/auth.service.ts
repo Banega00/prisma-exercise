@@ -26,7 +26,7 @@ export class AuthService{
             throw new CustomError({code: ErrorStatusCode.INVALID_PASSWORD, status: 400})
         };
 
-        return user
+        return { user: {...user, password: undefined }, token: this.helperService.signJWT({ id: user.id, email: user.email })}
     }
 
     async register(userData: DTO.Request.RegisterRequestDTO) {
@@ -48,6 +48,6 @@ export class AuthService{
             password: hashedPassword
         }})
 
-        return user;
+        return { user: {...user, password: undefined }, token: this.helperService.signJWT({ id: user.id, email: user.email })}
     }
 }

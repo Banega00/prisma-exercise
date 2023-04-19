@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-class ConfigService {
+export class ConfigService {
 
     public env = {
         environment: this.getValue('NODE_ENV') || this.getValue('ENV') || this.getValue('ENVIRONMENT'),
@@ -11,7 +11,8 @@ class ConfigService {
             username: this.getValue('DB_USERNAME'),
             password: this.getValue('DB_PASSWORD'),
             db_name: this.getValue('DB_NAME'),
-        }
+        },
+        jwt_secret: this.getValue('JWT_SECRET'),
     }
 
     public db_url(){

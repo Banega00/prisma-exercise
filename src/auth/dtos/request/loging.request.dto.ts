@@ -1,6 +1,12 @@
 import { IsNotEmpty, IsString, Length } from "class-validator"
+import { RequestDTO } from "."
 
-export class LoginRequestDTO{
+export class LoginRequestDTO extends RequestDTO{
+
+    constructor() {
+        super();
+        
+    }
     
     @IsNotEmpty()
     @IsString()
