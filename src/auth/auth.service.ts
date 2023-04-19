@@ -3,11 +3,11 @@ import { PrismaService } from "src/prisma/prisma.service";
 import * as DTO from '../auth/dtos/index'
 import CustomError from "src/helper/custom-error";
 import { ErrorStatusCode, SuccessStatusCode } from "src/helper/status-codes";
-import { hashPassword, verifyPassword } from "src/helper/hash.function";
+import { HelperService } from "src/helper/helper.service";
 @Injectable()
 export class AuthService{
     
-    constructor(private prisma: PrismaService){
+    constructor(private prisma: PrismaService, private helperService: HelperService){
     }
 
     async login(email: string, password: string) {
@@ -21,7 +21,8 @@ export class AuthService{
             throw new CustomError({code: ErrorStatusCode.USER_NOT_FOUND, status: 404})
         }
 
-        if(!verifyPassword(password, user.password)){
+        const isValid = this.helperService.verifyPassword(password, user.password)
+        if(!this.helperService.verifyPassword(password, user.password)){
             throw new CustomError({code: ErrorStatusCode.INVALID_PASSWORD, status: 400})
         };
 
@@ -39,7 +40,7 @@ export class AuthService{
             throw new CustomError({code: ErrorStatusCode.USER_ALREADY_EXISTS, status: 400})
         }
 
-        const hashedPassword = hashPassword(userData.password)
+        const hashedPassword = this.helperService.hashPassword(userData.password)
 
         const user = await this.prisma.user.create({data: {
             email: userData.email,

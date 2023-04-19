@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import CustomError from "./custom-error";
 import { configService } from "src/config/config.service";
 import { ErrorStatusCode, getStatusCodeDescription } from "./status-codes";
+
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
     private readonly logger = new Blogger('Exception Handler');
