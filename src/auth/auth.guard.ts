@@ -15,6 +15,7 @@ export class AuthGuard implements CanActivate {
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
 
         const request = context.switchToHttp().getRequest();
+        const response = context.switchToHttp().getResponse();
 
         //validate JWT token
         const token = request.cookies.token;
@@ -35,7 +36,7 @@ export class AuthGuard implements CanActivate {
             if(!jwtPayload.role || !roles.includes(jwtPayload.role)) throw new CustomError({ status: 403, code: ErrorStatusCode.FORBIDDEN } )
         }
 
-        request.user = jwtPayload;
+        response.locals.user = jwtPayload;
 
         return true;
     }

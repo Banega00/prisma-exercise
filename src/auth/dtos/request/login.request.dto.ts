@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString, Length } from "class-validator"
 import { RequestDTO } from "."
 
-export class LoginRequestDTO extends RequestDTO{
+export class Login extends RequestDTO{
 
     constructor() {
         super();

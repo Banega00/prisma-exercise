@@ -4,6 +4,7 @@ import * as DTO from '../auth/dtos/index'
 import CustomError from "src/helper/custom-error";
 import { ErrorStatusCode, SuccessStatusCode } from "src/helper/status-codes";
 import { HelperService } from "src/helper/helper.service";
+import { Role, User } from "@prisma/client";
 @Injectable()
 export class AuthService{
     
@@ -29,7 +30,7 @@ export class AuthService{
         return { user: {...user, password: undefined }, token: this.helperService.signJWT({ id: user.id, email: user.email, role: user.role })}
     }
 
-    async register(userData: DTO.Request.RegisterRequestDTO) {
+    async register(userData: DTO.Request.RegisterRequestDTO, authUser: User) {
         const existingUser = await this.prisma.user.findUnique({
             where: {
                 email: userData.email
@@ -38,6 +39,10 @@ export class AuthService{
 
         if(existingUser){
             throw new CustomError({code: ErrorStatusCode.USER_ALREADY_EXISTS, status: 400})
+        }
+
+        if(userData.role == Role.ADMIN && (!authUser || authUser.role != Role.ADMIN)){
+            throw new CustomError({code: ErrorStatusCode.FORBIDDEN, status: 403, message:'Only Admin can register another admin'})
         }
 
         const hashedPassword = this.helperService.hashPassword(userData.password)

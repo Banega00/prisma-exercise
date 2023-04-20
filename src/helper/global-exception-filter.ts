@@ -1,4 +1,4 @@
-import { ArgumentsHost, BadRequestException, Catch, ExceptionFilter } from "@nestjs/common";
+import { ArgumentsHost, BadRequestException, Catch, ExceptionFilter, NotFoundException } from "@nestjs/common";
 import Blogger from "./blogger";
 import { Request, Response } from 'express';
 import CustomError from "./custom-error";
@@ -27,6 +27,15 @@ export class GlobalExceptionFilter implements ExceptionFilter {
                 message: message,
                 payload: errorPayload,
                 status: 400
+            })
+        }
+
+        if(exception instanceof NotFoundException){
+            return response.status(404).json({
+                statusCode: 10000,
+                message: 'Route not found',
+                payload: undefined,
+                status: 404
             })
         }
 

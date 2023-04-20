@@ -6,5 +6,5 @@ export class RequestDTO{
 }
 
 
-export { RegisterRequestDTO } from "./register.request.dto";
-export { LoginRequestDTO } from "./loging.request.dto";
+export { Register as RegisterRequestDTO } from "./register.request.dto";
+export { Login as LoginRequestDTO } from "./login.request.dto";

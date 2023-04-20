@@ -3,7 +3,7 @@ import { Transform } from "class-transformer";
 import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString, Length } from "class-validator"
 import { RequestDTO } from "./index"
 
-export class RegisterRequestDTO extends RequestDTO{
+export class Register extends RequestDTO{
 
     constructor() {
         super();
