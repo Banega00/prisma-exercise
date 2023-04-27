@@ -16,7 +16,7 @@ model User {
   password String
   role     Role    @default(USER)
   name     String?
-  Post     Post[]
+  posts    Post[]
 }
 
 enum Role {

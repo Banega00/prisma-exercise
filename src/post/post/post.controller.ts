@@ -42,4 +42,11 @@ export class PostController{
         const user = response.locals.user;
         return await this.postService.deletePost(id, user);
     }
+
+    @Get('user/:id')
+    @UseGuards(AuthGuard)
+    @HttpCode(200)
+    async getUserPosts(@Param('id', ParseIntPipe) id:number){
+        return await this.postService.getUsersPosts(id);
+    }
 }

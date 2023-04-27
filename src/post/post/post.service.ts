@@ -79,5 +79,15 @@ export class PostService {
 
     }
 
+    async getUsersPosts(id: number) {
+        const user = await this.prisma.user.findUnique({where: {id}})
+        if(!user){
+            throw new CustomError({code: ErrorStatusCode.UNAUTHORIZED, status: 401, message:'You have to be logged in to create a post'})
+        }
+
+        const posts = await this.prisma.post.findMany({where: {authorId: user.id}})
+
+        return posts;
+    }
     
 }
