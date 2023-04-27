@@ -32,4 +32,15 @@ export class HelperService {
             return false;
         }
     }
+
+    // Exclude keys from user
+    excludeProperties<User, Key extends keyof User>(
+        user: User,
+        keys: Key[]
+    ): Omit<User, Key> {
+        for (let key of keys) {
+            delete user[key]
+        }
+        return user
+    }
 }
