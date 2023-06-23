@@ -16,7 +16,7 @@ export interface ValidationPipeOptions extends ValidatorOptions {
 
 async function bootstrap() {
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {logger: false});
   app.enableCors();
   app.use(cookieParser());
   app.useGlobalFilters(new GlobalExceptionFilter());
@@ -24,6 +24,9 @@ async function bootstrap() {
   app.use(Blogger.logExpressRoute)
   app.useGlobalPipes(new ValidationPipe({transform: true, disableErrorMessages: false}));
 
+  const logger = new Blogger('TEST');
+
+  logger.info('Starting application...');
   await app.listen(configService.env.port);
 }
 

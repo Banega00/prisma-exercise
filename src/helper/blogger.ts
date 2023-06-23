@@ -182,9 +182,14 @@ export default class Blogger{
         })
     }
     
-    public error(message: string, data?: any): void {
+    public error(message: string | Error, data?: any): void {
         try{
             let dataToPrint:string;
+
+            if(message instanceof Error){
+                data = message;
+                message = message.message;
+            }
             if(isAxiosError(data)){
                 const obj:any = { type: 'HTTP Error', message: data.message }
                 if(data.response){
@@ -203,9 +208,10 @@ export default class Blogger{
                 }
                 dataToPrint = JSON.stringify(obj,null,2)
             }else{
-                dataToPrint = data instanceof Error ? JSON.stringify({message:data.message, stack: data.stack},null,2) : JSON.stringify(data,null,2)
+                dataToPrint = data instanceof Error ? JSON.stringify({message:data.message},null,2) : JSON.stringify(data,null,2)
+                dataToPrint += `\nStack: ${data.stack}`
             } 
-            this.print(this.instance.error.bind(this.instance), message, dataToPrint);
+            this.print(this.instance.error.bind(this.instance), message as string, dataToPrint);
         }catch(error){
             console.log(`Error logging error`)
             console.log(error)
